@@ -1,32 +1,53 @@
+import sys, os, re
+import webbrowser
 from bruteforce import *
-from injection import *
 from scan_method import *
 from scan_port import *
-import sys
-import os
+
+url_regex = re.compile("([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?")
+chrome_path = 'C:/Program Files/Google/Chrome/Application/chrome.exe %s'
+
+def report_maker(bf_val, ms_val, ps_val) :
+    this_path = os.getcwd()
+    template = open('template.html', 'r', encoding='UTF-8')
+    report_template = template.read()
+    if bf_val == 0 :
+        report_template = report_template.replace("{bf_result}", "무차별 대입 공격 점검 미실시")
+        report_template = report_template.replace("{ms_result}", str(ms_val))
+        report_template = report_template.replace("{ps_result}", str(ps_val))
+    else :
+        report_template = report_template.replace("{bf_result}", str(bf_val))
+        report_template = report_template.replace("{ms_result}", str(ms_val))
+        report_template = report_template.replace("{ps_result}", str(ps_val))
+    report_output = open('inspection_report.html', 'w')
+    report_output.write(report_template)
+    template.close()
+    webbrowser.get(chrome_path).open(this_path+'/inspection_report.html')
+
 
 if __name__ == "__main__":
-    print("\nWeb-vulnerability-scan-tool ver.0.1 - KNL\n")
+    print("\nWeb-vulnerability-scan-tool ver.1 - KNL\n")
+    bf_val = None
+    ms_val = None
+    ps_val = None
+    print("로그인 무차별 대입 공격에 대한 점검을 포함하시려면 아래 입력에 숫자 1 을 입력해주십시오. \n")
     while(True):
         try:
-            print("사용할 기능 선택 \n")
-            print("1. bruteforce  2. 웹 서비스 메소드 점검  3. Port Scan 4. Injection(구현예정) 5. XSS(구현예정)")
-            selec_modul = int(input("입력 : "))
-            if selec_modul == 1 : 
-                brutefoce_attack()
-            elif selec_modul == 2 : 
-                scan_method()
-            elif selec_modul == 3 : 
-                 scan_port()
-            else :
-                os.system('cls')
-                print("\n아직 구현되지 않았습니다. 다른 기능을 이용해주세요.")
-            
-            answer = input("\n\n프로그램을 종료 하시겠습니까? [Y/N] \n입력 : ")
-            if answer == 'Y' or answer == 'y' : break
-            elif answer == 'N' or answer == 'n' : 
-                os.system('cls')
-                continue
+            input_val = input("점검하실 URL을 입력해주십시오. \n입력 : ")
+            if input_val == '1' :
+                bf_val = brutefoce_attack()
+            elif bf_val == None :
+                bf_val = 0
+                # if url_regex.search(input_val.replace(" ","")) is None :
+                #     print("URL 이 올바르지 않습니다. 다시 입력해주세요.")
+                #     continue
+                ms_val = scan_method(input_val)
+                domain_address = re.sub("http(s)?:\/\/", '', input_val)
+                result_address = domain_address.strip('/')
+                ps_val = scan_info(result_address)
+            report_maker(bf_val, ms_val, ps_val)
+            print("\n점검 완료")
+            break
         except KeyboardInterrupt:
             sys.exit()
         except:
