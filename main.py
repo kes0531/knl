@@ -12,21 +12,31 @@ def report_maker(bf_val, ms_val, ps_val) :
     template = open('template.html', 'r', encoding='UTF-8')
     report_template = template.read()
     if bf_val == 0 :
+        report_template = report_template.replace("{server_info}", str(ms_val['server_info']))
         report_template = report_template.replace("{bf_result}", "무차별 대입 공격 점검 미실시")
-        report_template = report_template.replace("{ms_result}", str(ms_val))
-        report_template = report_template.replace("{ps_result}", str(ps_val))
+        report_template = report_template.replace("{ms_result}", str(ms_val['method']))
+        report_template = report_template.replace("{ps_result}", str(ps_val['port_num']))
     else :
+        report_template = report_template.replace("{server_info}", str(ms_val['server_info']))
         report_template = report_template.replace("{bf_result}", str(bf_val))
-        report_template = report_template.replace("{ms_result}", str(ms_val))
-        report_template = report_template.replace("{ps_result}", str(ps_val))
+        report_template = report_template.replace("{ms_result}", str(ms_val['method']))
+        report_template = report_template.replace("{ps_result}", str(ps_val['port_num']))
     report_output = open('inspection_report.html', 'w')
     report_output.write(report_template)
     template.close()
     webbrowser.get(chrome_path).open(this_path+'/inspection_report.html')
 
+def address_regex(in_data):
+    domain_address = re.sub("http(s)?:\/\/", '', in_data)
+    result_address = re.sub("\/.+", '',domain_address)
+    return result_address
+
+
 
 if __name__ == "__main__":
-    print("\nWeb-vulnerability-scan-tool ver.1 - KNL\n")
+    print("\n웹_취약점_점검_도구 ver.1\n                        by.KNL\n")
+    print("보안 초심자 및 비전공자를 대상으로 웹 취약점 관련 정보를 쉽게 제공하고자 제작되었습니다.")
+    print("악위적인 행위로 사용 시 법에 저촉될 수 있습니다.\n")
     bf_val = None
     ms_val = None
     ps_val = None
@@ -36,14 +46,14 @@ if __name__ == "__main__":
             input_val = input("점검하실 URL을 입력해주십시오. \n입력 : ")
             if input_val == '1' :
                 bf_val = brutefoce_attack()
+                input_val = input("무차별 대입 공격 점검 완료\n점검하실 URL을 입력해주십시오. \n입력 : ")
+                result_address = address_regex(input_val)
+                ms_val = scan_method("http://"+result_address)
+                ps_val = scan_info(result_address)
             elif bf_val == None :
                 bf_val = 0
-                # if url_regex.search(input_val.replace(" ","")) is None :
-                #     print("URL 이 올바르지 않습니다. 다시 입력해주세요.")
-                #     continue
-                ms_val = scan_method(input_val)
-                domain_address = re.sub("http(s)?:\/\/", '', input_val)
-                result_address = domain_address.strip('/')
+                result_address = address_regex(input_val)
+                ms_val = scan_method("http://"+result_address)
                 ps_val = scan_info(result_address)
             report_maker(bf_val, ms_val, ps_val)
             print("\n점검 완료")
