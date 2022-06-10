@@ -15,10 +15,9 @@ def find_form(form_val):
     return form_val
 
 
-def brutefoce_attack():
+def brutefoce_attack(login_url):
     count = 0
     temp = None
-    login_url = input("로그인 URL 입력 : ")
     id = input("\nID 입력 : ")
     print("\n로그인 실패 시 표시되는 문구를 입력해주십시오. (예) Login Fail, Password Incorrect, 로그인 실패")
     login_fail_text = input("\n입력 : ")

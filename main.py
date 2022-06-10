@@ -37,16 +37,17 @@ if __name__ == "__main__":
     print("\n웹_취약점_점검_도구 ver.1\n                        by.KNL\n")
     print("보안 초심자 및 비전공자를 대상으로 웹 취약점 관련 정보를 쉽게 제공하고자 제작되었습니다.")
     print("악위적인 행위로 사용 시 법에 저촉될 수 있습니다.\n")
+    print("테스트 사이트 : http://suninatas.com/, 자체 제작 사이트\n")
     bf_val = None
     ms_val = None
     ps_val = None
     print("로그인 무차별 대입 공격에 대한 점검을 포함하시려면 아래 입력에 숫자 1 을 입력해주십시오. \n")
     while(True):
         try:
-            input_val = input("점검하실 URL을 입력해주십시오. \n입력 : ")
+            input_val = input("점검하실 URL 또는 옵션을 입력해주십시오. \n입력 : ")
             if input_val == '1' :
-                bf_val = brutefoce_attack()
-                input_val = input("무차별 대입 공격 점검 완료\n점검하실 URL을 입력해주십시오. \n입력 : ")
+                input_val = input("점검하실 URL을 입력해주십시오. \n입력 : ")
+                bf_val = brutefoce_attack(input_val)
                 result_address = address_regex(input_val)
                 ms_val = scan_method("http://"+result_address)
                 ps_val = scan_info(result_address)
