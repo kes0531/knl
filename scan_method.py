@@ -20,16 +20,20 @@ def scan_method(scan_url):
         except :
             total_info['server_info'] = res_option.headers['server']
             if res_head.status_code == 200 : method.append('HEAD')
-            else : print("응답코드",res_head.status_code," HEAD 미사용")
             if res_get.status_code == 200 : method.append('GET')
-            else : print("응답코드 ",res_head.status_code," GET 미사용")
             if res_post.status_code == 200 : method.append('POST')
-            else : print("응답코드 ",res_head.status_code," POST 미사용")
             if res_put.status_code == 200 : method.append('PUT')
-            else : print("응답코드 ",res_head.status_code," PUT 미사용")
             if res_delete.status_code == 200 : method.append('DELETE')
-            else : print("응답코드 ",res_head.status_code," DELETE 미사용")
             total_info['method'] = method
-        return total_info
-    else :
+    elif res_option.status_code != 200 and res_head.status_code != 200 :
         print("사이트 헤더 정보를 읽어올 수 없음\n")
+    else :
+        total_info['server_info'] = "서버 정보를 알 수 없음"
+        if res_head.status_code == 200 : method.append('HEAD')
+        if res_get.status_code == 200 : method.append('GET')
+        if res_post.status_code == 200 : method.append('POST')
+        if res_put.status_code == 200 : method.append('PUT')
+        if res_delete.status_code == 200 : method.append('DELETE')
+        total_info['method'] = method
+    
+    return total_info

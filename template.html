@@ -1,23 +1,46 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <style>
+            .report_title {
+                padding : 1% 0 1% 0;
+                background-color: black;
+                color : white;
+                font-size: 24px;
+                text-align: center;
+            }
+            .result_title {
+                border: 1px solid black;
+                margin : 2% 0 2% 0;
+                padding : 1%;
+            }
+        </style>
         <title>
             점검 결과
         </title>
     </head>
     <body>
-        점검 내용
-        <p>
-            웹 사이트 서버 정보 : {server_info}
-        </p>
-        <p>
-            무차별 대입 공격 결과 : {bf_result}
-        </p>
-        <p>
-            웹 사이트 메소드 사용 정보 : {ms_result}
-        </p>
-        <p>
-            웹 사이트 허용 포트 리스트 : {ps_result}
-        </p>
+        <div class="report_title">
+            점검 내용
+        </div>
+        <div class="result_title">
+            <span>점검 URL :</span> {scan_url}
+        </div> 
+        <div class="result_title">
+            <span>웹 사이트 서버 정보 : </span>{server_info}
+        </div>
+        <div class="result_title">
+            <span>무차별 대입 공격 결과 : </span>{bf_result}
+        </div>
+        <div class="result_title">
+            <span>웹 사이트 메소드 사용 정보 : </span>{ms_result}
+        </div>
+        <div class="result_title">
+            <span>웹 사이트 허용 포트 리스트 : </span>{ps_result}
+        </div>
+        <div class="result_title">
+            <span>웹 사이트 디렉터리 리스팅 결과 : </span>{dic_result}<br>
+            <span>리스팅으로 노출된 경로 : </span>{allow_list}
+        </div>
     </body>
 </html>

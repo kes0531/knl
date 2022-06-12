@@ -46,8 +46,3 @@ def scan_info(input_address):
             print("잘못된 입력입니다. 다시 입력해주세요.\n")
             continue
     return total_access_port
-
-# if __name__ == "__main__":
-#     scan_info('suninatas.com')
-#     # scan_info('localhost')
-#     print("\n",access_port)
