@@ -42,7 +42,7 @@ def address_regex(in_data):
 
 
 if __name__ == "__main__":
-    print("\n웹_취약점_점검_도구 ver.1\n                            by.KNL\n")
+    print("\n웹_취약점_점검_도구 ver.1\n                         by.NaChangWon\n")
     print("보안 초심자 및 비전공자를 대상으로 웹 취약점 관련 정보를 쉽게 제공하고자 제작되었습니다.")
     print("악위적인 행위로 사용 시 법에 저촉될 수 있습니다.\n")
     print("테스트 사이트 : http://suninatas.com/, 자체 제작 사이트\n")
