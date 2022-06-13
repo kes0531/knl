@@ -2,19 +2,49 @@
 <html>
     <head>
         <style>
-            .report_title {
+            div {
+                margin-left : 2%;
+            }
+            div.report_title {
                 padding : 1% 0 1% 0;
                 background-color: black;
                 color : white;
                 font-size: 24px;
                 text-align: center;
+                margin : 0;
             }
-            .result_title {
+            div.result_title {
                 border: 1px solid black;
                 margin : 2% 0 2% 0;
                 padding : 1%;
             }
+            div.explanation {
+                margin-top : 1%;
+            }
+            a {
+                color : black;
+            }
+            span {
+                font-weight : bold;
+                color : red;
+            }
+            span.info_title {
+                color : black;
+            }
+            #DisplayDiv_dic {
+                margin-bottom: 2% ;
+            }
         </style>
+        <script>
+            function onDisplay(id_val) {
+                var control = document.getElementById(id_val);
+                if(control.style.display=='none'){
+		            control.style.display = 'block';
+                }else{
+                    control.style.display = 'none';
+                }
+            }
+        </script>
         <title>
             점검 결과
         </title>
@@ -23,24 +53,64 @@
         <div class="report_title">
             점검 내용
         </div>
+        <div class="explanation">
+            각 점검 항목 클릭 시 설명 확인 가능
+        </div>
         <div class="result_title">
-            <span>점검 URL :</span> {scan_url}
+            <span class="info_title">점검 URL :</span> {scan_url}
         </div> 
         <div class="result_title">
-            <span>웹 사이트 서버 정보 : </span>{server_info}
+            <span class="info_title">웹 사이트 서버 정보 : </span>{server_info}
         </div>
-        <div class="result_title">
-            <span>무차별 대입 공격 결과 : </span>{bf_result}
+        <div class="result_title" onclick="onDisplay('DisplayDiv_bf');" style="cursor: pointer;">
+            <span class="info_title">무차별 대입 공격 결과 : </span>{bf_result}
         </div>
-        <div class="result_title">
-            <span>웹 사이트 메소드 사용 정보 : </span>{ms_result}
+        <div id="DisplayDiv_bf" style="display: none;">
+            <h2>무차별 대입 공격(brute-force attack) 이란?</h2>
+            특정한 암호를 풀기 위해 가능한 모든 값을 대입하는 것을 의미<br>
+            위 점검에서 <span>취약</span> 판정 시, 공격자가 시간만 투자한다면 암호를 알아낼 수 있음을 의미<br>
+            따라서 로그인 시도 횟수에 제한을 두거나 자동입력방지 문구를 사용하여 자동화 공격을 방지하는 것을 권장
         </div>
-        <div class="result_title">
-            <span>웹 사이트 허용 포트 리스트 : </span>{ps_result}
+        <div class="result_title" onclick="onDisplay('DisplayDiv_ms');" style="cursor: pointer;">
+            <span class="info_title">웹 사이트 메소드 사용 정보 : </span>{ms_result}
         </div>
-        <div class="result_title">
-            <span>웹 사이트 디렉터리 리스팅 결과 : </span>{dic_result}<br>
-            <span>리스팅으로 노출된 경로 : </span>{allow_list}
+        <div id="DisplayDiv_ms" style="display: none;">
+            <h2>웹 사이트 메소드(Method) 란?</h2>
+            웹 클라이언트가 웹 서버에게 요청의 목적을 알리기 위해 메소드(Method) 라는 수단을 이용<br>
+            목적에 따라 여러가지로 분류된다. 요청에 필요한 GET, POST 를 제외한 메소드는 보안상 비활성화를 권장<br>
+            사용 중일 시 <span>위험</span>한 메소드<br>
+            > <span>PUT</span> : 웹 클라이언트에서 웹 서버로 파일을 업로드 할 수 있음<br>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;악용 시 웹쉘을 통한 시스템 침투 가능<br>
+            > <span>DELETE</span> : 웹 클라이언트에서 웹 서버의 파일을 삭제할 수 있음<br>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;악용 시 서비스에 필요한 파일을 지워 DoS 공격을 야기할 수 있음
+        </div>
+        <div class="result_title" onclick="onDisplay('DisplayDiv_ps');" style="cursor: pointer;">
+            <span class="info_title">웹 사이트 허용 포트 리스트 : </span>{ps_result}
+        </div>
+        <div id="DisplayDiv_ps" style="display: none;">
+            <h2>포트(Port) 란?</h2>
+            애플리케이션에서 데이터의 목적지를 구분 짓기 위한 번호 <br>
+            IP로 서버의 주소를 찾았다면 포트는 서버 내 필요한 애플리케이션(프로그램)을 찾기 위한 주소로 이용됨<br>
+            특별히 <span>차단</span> 또는 <span style="color:orange;">주의</span>가 필요한 포트 번호 
+            ( 보다 자세한 정보 : <a href="https://technoglitz.com/korea/%EC%9D%BC%EB%B6%80-%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%ED%8F%AC%ED%8A%B8%EA%B0%80-%EC%9C%84%ED%97%98%ED%95%9C-%EC%9D%B4%EC%9C%A0%EB%8A%94-%EB%AC%B4%EC%97%87%EC%9D%B4%EB%A9%B0-%EC%96%B4%EB%96%BB/">참고1</a>
+            <a href="https://itigic.com/ko/protect-tcp-and-udp-ports-and-why-some-are-dangerous/">참고2</a> )
+            <br>
+            > <span>21</span> : FTP를 이용한 파일 전송에 사용. 제한 없이 열어두었을 경우 악용될 수 있음. 미사용시 <span>차단 권장</span> ( <a href="https://easy7.tistory.com/393">참고</a> )<br>
+            > <span style="color : orange;">22</span> : SSH 프로토콜로 컴퓨터를 원격으로 관리하는데 사용. 무차별 대입 공격의 주요 공격점으로 사용됨. <span style="color : orange;">주의 필요</span> <br>
+            > <span>23</span> : Telnet 서비스를 사용. 텍스트 기반 통신 방식으로 암호화 미지원. 도청 및 접속 정보 탈취 시 피해 발생 가능성 있음. <span>차단 권장</span> <br>
+            > <span style="color : orange;">80, 8080, 8088, 8888, 443</span> : HTTP(S)에서 일반적으로 사용되는 포트. 웹 서비스로 주로 이용되어 차단은 어려움. 따라서 <span style="color : orange;">주의 필요</span> <br>
+            > <span>1080</span> : SOCKS 프록시에서 TCP 연결의 네트워크 패킷을 IP 주소로 라우팅하고 전달하는데 사용. 과거 멀웨어, 웜, 서비스 거부 공격에 선호된 포트. <span>차단 권장</span> <br>
+            > <span>4444</span> : 일부 루트킷, 백도어 및 트로이 목마 등에 이용되는 포트. <span>차단 권장</span> <br>
+            > <span>6660~6669</span> : IRC(Internet Relay Chat)에서 사용됨. 오랜 기간 사용되어 많은 취약점 발견. 미사용시 <span>차단 권장</span>
+        </div>
+        <div class="result_title" onclick="onDisplay('DisplayDiv_dic');" style="cursor: pointer;">
+            <span class="info_title">웹 사이트 디렉터리 리스팅 결과 : </span>{dic_result}<br>
+            <span class="info_title">리스팅으로 노출된 경로 : </span>{allow_list}
+        </div>
+        <div id="DisplayDiv_dic" style="display: none;">
+            <h2>디렉터리 리스팅(Directory Listing) 이란?</h2>
+            취약한 웹 서버 설정으로 인해 인덱싱(리스팅) 기능이 활성화 되어 서버 내 모든 디렉터리 및 파일 목록을 볼 수 있는 취약점 <br>
+            개인정보와 같은 중요한 파일이 노출되었을 경우, 공격자가 무단으로 파일을 열람 또는 다운로드 할 수 있어 인덱싱 기능 비활성화 필요 <br>
         </div>
     </body>
 </html>
