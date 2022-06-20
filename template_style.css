@@ -1,0 +1,32 @@
+div {
+    margin-left : 2%;
+}
+div.report_title {
+    padding : 1% 0 1% 0;
+    background-color: black;
+    color : white;
+    font-size: 24px;
+    text-align: center;
+    margin : 0;
+}
+div.result_title {
+    border: 1px solid black;
+    margin : 2% 0 2% 0;
+    padding : 1%;
+}
+div.explanation {
+    margin-top : 1%;
+}
+a {
+    color : black;
+}
+span {
+    font-weight : bold;
+    color : red;
+}
+span.info_title {
+    color : black;
+}
+#DisplayDiv_dic {
+    margin-bottom: 2% ;
+}
