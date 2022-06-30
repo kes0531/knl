@@ -1,11 +1,12 @@
-import sys, os, re
+from tkinter import *
+from tkinter.ttk import Progressbar
+import os, re
 import webbrowser
 from bruteforce import *
 from scan_method import *
 from scan_port import *
 from directory_listing import *
 
-url_regex = re.compile("([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?")
 chrome_path = 'C:/Program Files/Google/Chrome/Application/chrome.exe %s'
 
 def report_maker(input_val, bf_val, dic_val, ms_val, ps_val) :
@@ -39,40 +40,64 @@ def address_regex(in_data):
     result_address = temp.strip('/')
     return result_address
 
+def progress_bar(stats_val):
+    cur_pb.set(stats_val)
+    stats_pb.update()
 
-
-if __name__ == "__main__":
-    print("\n웹_취약점_점검_도구 ver.1\n                         by.NaChangWon\n")
-    print("보안 초심자 및 비전공자를 대상으로 웹 취약점 관련 정보를 쉽게 제공하고자 제작되었습니다.")
-    print("악위적인 행위로 사용 시 법에 저촉될 수 있습니다.\n")
-    print("테스트 사이트 : http://suninatas.com/, 자체 제작 사이트\n")
+def run_event():
+    input_val = input_url.get()
     bf_val = None
     dic_val = None
     ms_val = None
     ps_val = None
-    print("로그인 무차별 대입 공격에 대한 점검을 포함하시려면 아래 입력에 숫자 1 을 입력해주십시오. \n")
-    while(True):
-        try:
-            input_val = input("점검하실 URL 또는 옵션을 입력해주십시오. \n입력 : ")
-            if input_val == '1' :
-                input_val = input("점검하실 URL을 입력해주십시오. \n입력 : ")
-                bf_val = brutefoce_attack(input_val)
-                dic_val = directory_listing(input_val)
-                result_address = address_regex(input_val)
-                ms_val = scan_method("http://"+result_address)
-                ps_val = scan_info(result_address)
-            elif bf_val == None :
-                bf_val = 0
-                dic_val = directory_listing(input_val)
-                result_address = address_regex(input_val)
-                ms_val = scan_method("http://"+result_address)
-                ps_val = scan_info(result_address)
-            report_maker(input_val ,bf_val, dic_val, ms_val, ps_val)
-            print("\n점검 완료")
-            break
-        except KeyboardInterrupt:
-            sys.exit()
-        except:
-            os.system('cls')    
-            print("\n!! 잘못된 입력입니다. 처음부터 다시 입력해주십시오 !!\n")
-            continue
+    # try:
+        # if input_val == '1' :
+        #     bf_val = brutefoce_attack(input_val)
+        #     dic_val = directory_listing(input_val)
+        #     result_address = address_regex(input_val)
+        #     ms_val = scan_method("http://"+result_address)
+        #     ps_val = scan_info(result_address)
+    if bf_val == None :
+        bf_val = 0
+        dic_val = directory_listing(input_val)
+        progress_bar(33)
+        result_address = address_regex(input_val)
+        ms_val = scan_method("http://"+result_address)
+        progress_bar(66)
+        ps_val = scan_info(result_address)
+        progress_bar(100)
+    report_maker(input_val ,bf_val, dic_val, ms_val, ps_val)
+    # except:
+    #     os.system('cls')    
+    #     print("\n!! 잘못된 입력입니다. 처음부터 다시 입력해주십시오 !!\n")
+    #     continue
+
+
+
+if __name__ == "__main__":
+    tk = Tk()
+    tk.title("웹 취약점 점검 도구")
+    input_guide = Label(tk, text="웹 취약점 관련 정보를 쉽게 제공하고자 제작되었습니다.\n악용 시 법에 저촉될 수 있습니다.\n \nURL 입력하고 실행 시 점검이 시작됩니다.")
+    input_guide.grid(row=0, column=0, columnspan=2)
+    
+    input_url = Entry(tk, width=40) # URL 입력 텍스트 바
+    input_url.grid(row=1, column=0)
+
+    button = Button(tk, text="실행",command=run_event) # 실행 버튼
+    button.grid(row=1, column=1)
+
+    # options_guide = Label(tk, text="무차별 대입 공격 점검")
+    # options_guide.grid(row=2, column=0, columnspan=2)
+
+    # bf_options = IntVar()
+    # option_1 = Radiobutton(tk, text="실행", value=1, variable=bf_options, command=bf_option)
+    # option_1.grid(row=3, column=0, columnspan=2)
+    # option_2 = Radiobutton(tk, text="미실행", value=0, variable=bf_options, command=bf_option)
+    # option_2.grid(row=4, column=0, columnspan=2)
+
+    cur_pb = DoubleVar()
+    stats_pb = Progressbar(tk, maximum=100, length=320, variable=cur_pb)
+    stats_pb.grid(row=6, column=0, columnspan=2)
+
+    tk.mainloop()
+   
