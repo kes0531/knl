@@ -1,6 +1,6 @@
 import requests
 
-d_list = ['/icons/','/images/','/pr/','/adm/','/admin/','/files/','/download/','/files/attach/images', '%3f.jsp']
+directory_sheet = open("directory_sheet.txt",'r', encoding='utf-8')
 allow_list = []
 scan_result = {}
 
@@ -8,10 +8,12 @@ scan_result = {}
 
 def directory_listing(url):
     try:
-        for i in range(len(d_list)) :
-            result = requests.get(str(url)+d_list[i])
+        while(True):
+            directory_list = directory_sheet.readline()
+            result = requests.get(str(url)+directory_list)
+            if directory_list == '' : break
             if result.status_code == 200 :
-                allow_list.append(str(url)+d_list[i])
+                allow_list.append(str(url)+directory_list)
     except:
         pass
     
