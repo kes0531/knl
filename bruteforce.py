@@ -1,5 +1,6 @@
 from itertools import product
 import requests
+from tkinter import messagebox
 
 words = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*'
 
@@ -41,7 +42,7 @@ def brutefoce_attack(login_url, id, login_fail_text):
                 break
             elif address.text.find(login_fail_text) == -1:
                 if count <= 1 :
-                    print("로그인 실패 문구를 잘못 입력했습니다.")
+                    messagebox.showinfo("잘못된 입력","로그인 실패 문구를 잘못 입력했습니다. 다시 입력해주세요")
                     temp = 1
                 elif count <= 3 and count > 1 :
                     print("\n무차별 대입 공격 미허용")

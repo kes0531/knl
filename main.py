@@ -44,7 +44,7 @@ def progress_bar(stats_val):
     cur_pb.set(stats_val)
     stats_pb.update()
 
-def add_bf():
+def add_bf(): # 무차별 대입 점검 시에만 ID 입력 및 패스워드 실패 문구 입력 창이 뜨기 위한 함수
     if bf_option.get() == 1 :
         bf_id.grid(row=5, column=0, columnspan=2)
         input_id.grid(row=6, column=0, columnspan=2)
@@ -63,9 +63,9 @@ def run_event():
     ms_val = None
     ps_val = None
     if bf_option.get() == 1 :
-        bf_val = brutefoce_attack(input_val, str(input_id.get()), str(input_pw_msg.get()))
+        bf_val = brutefoce_attack(input_val, str(input_id.get()), str(input_pw_msg.get())) # 무차별 대입 점검 시에만 표시되는 텍스트 박스에 입력된 값을 가져옴
         progress_bar(25)
-        dic_val = directory_listing(input_val)
+        dic_val = directory_listing(re.match(r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b.', input_val).group(0)) # 로그인 URL에선 점검 불가, 도메인만 추출하기 위해 추가
         progress_bar(50)
         result_address = address_regex(input_val)
         ms_val = scan_method("http://"+result_address)
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     bf_pw.grid(row=7, column=0, columnspan=2)
     input_pw_msg = Entry(tk, width=30)
     input_pw_msg.grid(row=8, column=0, columnspan=2)
-    # 미입력시에는 보이지 않기 위해 미리 숨겨둠
+    # 점검하지 않을 시에는 보이지 않기 위해 미리 숨겨둠
     bf_id.grid_forget()
     input_id.grid_forget()
     bf_pw.grid_forget()
