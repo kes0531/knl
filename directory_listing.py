@@ -1,19 +1,18 @@
 import requests
-
-directory_sheet = open("directory_sheet.txt",'r', encoding='utf-8')
-allow_list = []
-scan_result = {}
+from tqdm import tqdm
 
 # 점검 URL http://testphp.vulnweb.com/
 
 def directory_listing(url):
+    directory_sheet = open("directory_sheet.txt",'r', encoding='utf-8')
+    directory_index = directory_sheet.read().split('\n')
+    allow_list = []
+    scan_result = {}
     try:
-        while(True):
-            directory_list = directory_sheet.readline()
-            result = requests.get(str(url)+directory_list)
-            if directory_list == '' : break
+        for i in tqdm(range(len(directory_index))) :
+            result = requests.get(str(url)+directory_index[i])
             if result.status_code == 200 :
-                allow_list.append(str(url)+directory_list)
+                allow_list.append(str(url)+directory_index[i])
     except:
         pass
     
